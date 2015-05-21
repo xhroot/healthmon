@@ -1,0 +1,118 @@
+{{%define "title"%}} - Health Monitor{{%end%}}
+
+{{%define "headcontent"%}}
+
+<!-- handlebars template -->
+
+<script id="healthrec-template" type="text/x-handlebars-template">
+{{#each result}}
+  <tr>
+    <td class="text-center">
+    <a href="/healthmon/detail/{{Id}}"><span class="glyphicon glyphicon-edit" title="View this record"></span></a>
+    </td>
+    <td class="text-center">
+    <a href="/healthmon/detail/?copy={{Id}}"><span class="glyphicon glyphicon-duplicate" title="Copy into new record"></span></a>
+    </td>
+    <td class="text-right"><a href="?patient={{Model.Patient}}">{{Model.Patient}}</a></td>
+    <td>{{Model.RecordType}}</td>
+    <td>{{Model.DateFromNow}}, <strong>{{Model.DateNice}}</strong></td>
+    <td class="text-right">{{Model.Measurement}}</td>
+    <td><a href="{{Model.MedicationUrl}}">{{Model.MedicationName}}</a></td>
+    <td>{{Model.Symptom}}</td>
+    <td>{{Model.Note}}</td>
+  </tr>
+{{/each}}
+</script>
+{{%end%}}
+
+{{%define "AppHomeUrl"%}}/healthmon/{{%end%}}
+{{%define "AppName"%}}Health Monitor{{%end%}}
+    
+{{%define "bodycontent"%}}
+
+<a href="https://github.com/xhroot/healthmon"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+<div class="row">
+    <div class="col-md-3 form-group">
+        <a href="/healthmon/detail/" class="btn btn-default btn-sm active" role="button">
+        <span class="glyphicon glyphicon-plus"></span> Create new health record
+        </a>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-12">
+
+      <table id="healthrecs" class="table table-striped table-bordered">
+      <thead>
+      <tr>
+          <th>view</th>
+          <th>copy</th>
+          <th>Patient</th>
+          <th>Record Type</th>
+          <th>Date</th>
+          <th>Measurement</th>
+          <th>Medication</th>
+          <th>Symptom</th>
+          <th>Note</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+      </table>
+      </div>
+  </div>
+</div>                                                                          
+
+<div class="row">
+    <div class="col-md-12" id="hello">
+    </div>
+</div>                                                                          
+{{%end%}}
+
+{{%define "footer"%}}{{%end%}}
+                                                                                
+{{%define "script"%}}
+<script type="text/jsx">
+
+var onStart = function() {
+    // Pass the querystring to the REST endpoint.
+    var url = '/healthmon/healthrec/?' + jsurl('?');
+
+    var xhr = $.ajax({
+        url: url,
+        contentType: 'application/json'
+    });
+
+    xhr.done(function(response) {
+        if (response.error) {
+            statusBox.danger(response.error);
+            statusBox.display();
+            return;
+        }
+
+        // Present date as local and human readable.
+        $.each(response.result, function(i, val) {
+            var dt = moment(val.Model['DateAction'], dateFormat.SERVER);
+            response.result[i].Model['DateFromNow'] = dt.fromNow();
+            response.result[i].Model['DateNice'] = dt.format(
+                dateFormat.DISPLAY);
+        });
+
+        var source = $('#healthrec-template').html();
+        var template = Handlebars.compile(source);
+        var html = template(response);
+        $('#healthrecs tbody').append(html);
+
+        // Consume any saved messages.
+        statusBox.display();
+    });
+};
+
+$(onStart);
+
+</script>
+
+
+{{%end%}}
+

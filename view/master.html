@@ -1,0 +1,146 @@
+{{%define "master"%}}
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+ 
+  <meta charset="utf-8">
+  <title>Record management{{%template "title" .%}}</title>
+
+  <!--
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  -->
+  <link rel="shortcut icon" href="/favicon.ico" type="img/vnd.microsoft.icon"> 
+  <link rel="icon" href="/favicon.ico" type="img/vnd.microsoft.icon"> 
+
+  <link rel="stylesheet" media="screen" href="/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="/css/global.css">
+                                                                                
+  <meta name="viewport" content="width=device-width, initial-scale=1">        
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+       
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+  <![endif]-->
+
+  <script>
+// Create console command that takes label argument.
+// `konsole.table('Table of Values:', data);`
+var konsole = {};
+for(c in console) { 
+    if (typeof console[c] === 'function') { 
+        konsole[c] = function(label, obj) {
+            if (label) console.log(label);
+            console[this](obj);
+        }.bind(c);
+    }
+}
+
+// Date format constants.
+var dateFormat = {
+    DISPLAY: 'MMM D, YYYY h:mm a',
+    SERVER: 'YYYY-MM-DDTHH:mm:ssZ'
+};
+
+  </script>
+
+  <script src="/js/react/build/react-with-addons.js"></script>
+  <script src="/js/react/build/JSXTransformer.js"></script>
+
+  <style>
+#statusContainer {
+height: 15px;
+line-height: 0px;
+margin-top: 15px;
+}   
+
+.spinner {
+display: inline-block;
+opacity: 0;
+width: 0;
+
+-webkit-transition: opacity 0.25s, width 0.25s;
+-moz-transition: opacity 0.25s, width 0.25s;
+-o-transition: opacity 0.25s, width 0.25s;
+transition: opacity 0.25s, width 0.25s;
+}
+
+.has-spinner.active {
+cursor:progress;
+}
+
+.has-spinner.active .spinner {
+opacity: 1;
+width: auto; /* This doesn't work, just fix for unkown width elements */
+}
+
+.has-spinner.btn-mini.active .spinner {
+width: 10px;
+}
+
+.has-spinner.btn-small.active .spinner {
+width: 13px;
+}
+
+.has-spinner.btn.active .spinner {
+width: 16px;
+}
+
+.has-spinner.btn-large.active .spinner {
+width: 19px;
+}
+  </style>
+
+    
+  {{%template "headcontent" .%}}
+
+</head>
+<body>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-2">
+    <a href="{{%template "AppHomeUrl" .%}}" class="logo">
+    <h1>{{%template "AppName" .%}}</h1>                               
+    </a>
+    </div>                                                                      
+    <div class="col-md-10" id="statusContainer">
+    </div>  
+  </div>
+                                                                                
+  {{%template "bodycontent" .%}}
+                                                                                
+  <div class="row">
+  <div class="col-md-12">
+    {{%template "footer" .%}}
+  </div>                                                                        
+  </div>                                                                        
+                                                                                
+</div>                                                                          
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- handlebars, templating -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.2/handlebars.min.js"></script>
+<!-- moment, sane date handling -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<!-- lodash, data transformation -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.7.0/lodash.min.js"></script>
+<!-- bootstrap js, extra ui widgets -->
+<script src="/bootstrap/js/bootstrap.js"></script>
+<!-- jsurl, url parsing -->
+<script src="/js/url.min.js"></script>
+<!-- helper functions. References: jQuery, react-with-addons -->
+<script src="/js/Helpers.js"></script>
+<!-- sitewide status box wrapper -->
+<script type="text/jsx" src="/js/StatusBox.jsx"></script>
+<script type="text/jsx">
+var statusBox = React.render(<StatusBox />, $('#statusContainer')[0]);
+</script> 
+                                                                                
+{{%template "script" .%}}
+</body>                                                                        
+</html> 
+{{%end%}}
+

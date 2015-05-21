@@ -1,0 +1,73 @@
+
+{{%define "title"%}} - Health Monitor edit{{%end%}}
+
+{{%define "headcontent"%}}
+<link rel="stylesheet" href="/css/bootstrap-datetimepicker.css">
+
+<style>
+.page-title h1 {
+    font-size: 1.8em;
+}
+    
+</style>
+{{%end%}}
+    
+{{%define "AppHomeUrl"%}}/healthmon/{{%end%}}
+{{%define "AppName"%}}Health Monitor{{%end%}}
+
+{{%define "bodycontent"%}}
+                                                                                
+<div id="mountnode"></div>
+
+{{%end%}}
+
+{{%define "footer"%}}{{%end%}}
+
+{{%define "script"%}}
+<!-- bootstrap datetime picker -->
+<script src="/js/bootstrap-datetimepicker.js"></script>
+
+<!-- bootstrap datetime picker -->
+<script src="/js/commonmark.js"></script>
+
+<script type="text/jsx" src="/js/ui.jsx"></script>
+<script type="text/javascript" src="/js/DataManager.js"></script>
+<script type="text/jsx">
+
+var onReady = function() {
+
+    // Get current URL path, go up 1 path. Assume id or querystring may exist.
+    // Remove 1 folder level.
+    // This is slightly more flexible than hardcoding, but a lot more opaque.
+    var p = jsurl('path').split('/');
+    var parentPath = _.filter(p, function(x, idx) {
+        return idx != p.length-2;
+    }).join('/');
+
+    var args = { 
+        // DataManager expects this endpoint to support REST-like requests.
+        dataManager: new DataManager('/healthmon/healthrec/'),
+
+        // Extract last url component as id.
+        id: jsurl('path').split('/').pop() || null,
+
+        // Extract `copy` from querystring.
+        copyId: jsurl('?copy') || null,
+
+        // Base URL of detail screen.
+        currentPath: jsurl('path'),
+
+        // URL of health monitor home table.
+        parentPath: parentPath
+    };
+
+    // The global statusBox is expected to be consumed by `healthrecForm`.
+    var healthrecForm = React.render(<HealthrecForm args={args} />, 
+        $('#mountnode')[0]);
+};
+
+$(onReady);
+
+</script>
+{{%end%}}
+
