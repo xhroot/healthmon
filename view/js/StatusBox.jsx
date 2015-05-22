@@ -37,9 +37,9 @@ var StatusBox = React.createClass({
 
     // Any storage mechanism that implements the below API can be used.
     store: {
-        get: function(x) { return localStorage.getItem(x); },
-        set: function(x,y) { localStorage.setItem(x, y); },
-        remove: function(x) { localStorage.removeItem(x); }
+	get: localStorage.getItem.bind(localStorage),
+	set: localStorage.setItem.bind(localStorage),
+	remove: localStorage.removeItem.bind(localStorage)
     },
 
     msgKey: 'status_box_message',
